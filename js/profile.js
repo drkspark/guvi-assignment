@@ -1,7 +1,7 @@
 $(document).ready(function() {
     // Fetch user data on page load
     $.ajax({
-      url: "profile.php",
+      url: "http:://localhost:8000/profile.php",
       method: "GET",
       dataType: "json",
       success: function(response) {

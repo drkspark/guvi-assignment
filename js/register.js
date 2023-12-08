@@ -19,17 +19,11 @@ $(document).ready(function() {
           },
           datatype : "json",
           success: function(response) {
-            response = JSON.parse(response);
             console.log(response);
             alert(response.message);
             window.location = "../login.html"
           },
           error: function (response) {
-            try{
-              response = JSON.parse(response);
-            } catch(e) {
-              console.log(e);
-            }
             console.log(response);
             alert(response === undefined ? "User not registered please try again" : response.message);
           }
