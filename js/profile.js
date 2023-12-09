@@ -1,18 +1,19 @@
 $(document).ready(function() {
-    // Fetch user data on page load
+    console.log(localStorage.getItem("email"));
+
     $.ajax({
-      url: "http:://localhost:8000/profile.php",
+      url: "http://localhost:8000/profile.php",
       method: "GET",
       dataType: "json",
+      data:{email: localStorage.getItem("email")},
       success: function(response) {
+        console.log(response);
         if (response.success) {
-          // Populate user information
           $("#full-name").text(response.data.full_name);
           $("#email").text(response.data.email);
-          $("#mobile").text(response.data.mobile);
           $("#age").val(response.data.age);
-          $("#dob").val(response.data.date_of_birth);
-          $("#college").val(response.data.college_name);
+          $("#dob").val(response.data.dob);
+          $("#college").val(response.data.college);
           $("#city").val(response.data.city);
           $("#state").val(response.data.state);
         } else {
@@ -25,6 +26,10 @@ $(document).ready(function() {
       }
     });
   
+    $("#logout").click(function () {
+      localStorage.removeItem("email");
+    })
+
     // Update profile button click event
     $("#update-profile").click(function() {
       var age = $("#age").val();
@@ -32,23 +37,35 @@ $(document).ready(function() {
       var college = $("#college").val();
       var city = $("#city").val();
       var state = $("#state").val();
-  
-      // AJAX request to update profile endpoint
+      
+      const jsonData = JSON.stringify(
+        { 
+        "email": localStorage.getItem("email"), 
+        "updates": {
+          "age": age,
+          "dob": dob,
+          "college": college,
+          "city": city,
+          "state": state 
+        }
+      });
+
       $.ajax({
-        url: "profile.php",
+        url: "http://localhost:8000/profile.php",
         method: "PUT",
         dataType: "json",
-        data: { age: age, dob: dob, college: college, city: city, state: state },
+        data: jsonData,
         success: function(response) {
+          console.log(response)
           if (response.success) {
             alert("Profile updated successfully!");
           } else {
             alert(response.message);
           }
         },
-        error: function(error) {
-          console.error("Error:", error);
-          alert("Something went wrong. Please try again later.");
+        error: function(response) {
+          console.log(response)
+          alert(response.message);
         }
       });
     });

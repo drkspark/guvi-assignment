@@ -3,6 +3,7 @@
 require_once "./config.php";
 
 $conn = $mysql_db;
+$conn_mongo = $mongo_db;
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST["email"];
@@ -31,6 +32,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         try {
             $stmt = $conn->prepare("insert into users values(?, ?, ?)");
             $stmt->execute([$email, password_hash($password, PASSWORD_DEFAULT) , $full_name]);
+            
+            $insertProfileData = $conn_mongo->insertOne(
+                [
+                    'email' => $email,
+                    'full_name' => $full_name
+                ]
+            );
+
             http_response_code(200);
             echo json_encode(array("message" => "User added successfully. You can now Login."));
             return;

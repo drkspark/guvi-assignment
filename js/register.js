@@ -20,12 +20,12 @@ $(document).ready(function() {
           datatype : "json",
           success: function(response) {
             console.log(response);
-            alert(response.message);
+            alert("User has been successfully registered. Please Login");
             window.location = "../login.html"
           },
           error: function (response) {
             console.log(response);
-            alert(response === undefined ? "User not registered please try again" : response.message);
+            alert("User not registered please try again");
           }
 
         }

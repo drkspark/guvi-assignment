@@ -17,6 +17,7 @@ $(document).ready(function() {
           console.log(response);
           if (response.success) {
             // Login successful, redirect to profile page
+            localStorage.setItem("email", email);
             window.location = "../profile.html";
           } else {
             // Login failed, display error message
